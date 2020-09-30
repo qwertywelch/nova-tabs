@@ -36,16 +36,17 @@
             v-for="(field, index) in tab.fields"
             :class="{'remove-bottom-border': index == tab.fields.length - 1}"
             :key="'tab-' + index"
-            :is="'form-' + field.component"
-            :resource-name="resourceName"
+            :is="mode + '-' + field.component"
+            :errors="validationErrors"
             :resource-id="resourceId"
-            :resource="resource"
-            :errors="errors"
+            :resource-name="resourceName"
             :field="field"
             :via-resource="viaResource"
             :via-resource-id="viaResourceId"
             :via-relationship="viaRelationship"
+            :shown-via-new-relation-modal="shownViaNewRelationModal"
             @actionExecuted="actionExecuted"
+            :show-help-text="field.helpText !== ''"
           />
         </div>
       </div>
@@ -66,16 +67,57 @@ export default {
     FormField,
     InteractsWithResourceInformation
   ],
-  props: [
-    "resource",
-    "resourceName",
-    "resourceId",
-    "field",
-    "errors",
-    "viaResource",
-    "viaRelationship",
-    "viaResourceId"
-  ],
+  props: {
+    shownViaNewRelationModal: {
+      type: Boolean,
+      default: false,
+    },
+
+    panel: {
+      type: Object,
+      required: true,
+    },
+
+    name: {
+      default: 'Panel',
+    },
+
+    mode: {
+      type: String,
+      default: 'form',
+    },
+
+    fields: {
+      type: Array,
+      default: [],
+    },
+
+    validationErrors: {
+      type: Object,
+      required: true,
+    },
+
+    resourceName: {
+      type: String,
+      required: true,
+    },
+
+    resourceId: {
+      type: [Number, String],
+    },
+
+    viaResource: {
+      type: String,
+    },
+
+    viaResourceId: {
+      type: [Number, String],
+    },
+
+    viaRelationship: {
+      type: String,
+    },
+  },
   data() {
     return {
       tabs: null,
